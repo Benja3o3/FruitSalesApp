@@ -20,13 +20,13 @@ class _MapScreenState extends State<MapScreen> {
   void initState() {
     super.initState();
     mapController = MapController();
+    getCurrentPosition();
     location.onLocationChanged.listen((LocationData xd) {
       setState(() {
         currentPosition = LatLng(xd.latitude!, xd.longitude!);
         tracePositions.add(LatLng(xd.latitude!, xd.longitude!));
       });
     });
-    getCurrentPosition();
   }
 
   @override
@@ -53,7 +53,6 @@ class _MapScreenState extends State<MapScreen> {
         return Future.error("Error: Permiso de ubicación denegado.");
       }
     }
-
     return await location.getLocation();
   }
 
@@ -62,6 +61,7 @@ class _MapScreenState extends State<MapScreen> {
       LocationData xd = await getLocation();
       setState(() {
         currentPosition = LatLng(xd.latitude!, xd.longitude!);
+        tracePositions.add(LatLng(xd.latitude!, xd.longitude!));
       });
     } catch (e) {}
   }
@@ -70,7 +70,24 @@ class _MapScreenState extends State<MapScreen> {
   Widget build(BuildContext context) {
     return Center(
       child: currentPosition == null
-          ? CircularProgressIndicator()
+          ? Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CircularProgressIndicator(),
+                ElevatedButton(
+                    onPressed: () {
+                      getCurrentPosition;
+                      location.onLocationChanged.listen((LocationData xd) {
+                        setState(() {
+                          currentPosition = LatLng(xd.latitude!, xd.longitude!);
+                          tracePositions
+                              .add(LatLng(xd.latitude!, xd.longitude!));
+                        });
+                      });
+                    },
+                    child: Text("Actualizar ubicacion"))
+              ],
+            )
           : Column(
               children: [
                 Container(

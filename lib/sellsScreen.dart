@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fruit_sales_app/fruitCard.dart';
 import 'package:fruit_sales_app/informationCard.dart';
 import 'package:fruit_sales_app/restartPopup.dart';
+import 'package:intl/intl.dart';
 
 class SellsScreen extends StatefulWidget {
   const SellsScreen({Key? key}) : super(key: key);
@@ -12,6 +13,8 @@ class SellsScreen extends StatefulWidget {
 }
 
 class _SellsScreenState extends State<SellsScreen> {
+  NumberFormat formatoDinero =
+      NumberFormat.currency(locale: 'es_CL', symbol: '\$');
   final TextEditingController _vueltoController = TextEditingController();
   final TextEditingController _ctaRutController = TextEditingController();
   List<String> fruits = ["Frambuesas", "Frutillas", "Arándanos", "Cerezas"];
@@ -132,9 +135,16 @@ class _SellsScreenState extends State<SellsScreen> {
                     "Frutas Vendidas",
                     style: TextStyle(fontSize: 30),
                   ),
-                  ElevatedButton(
-                      onPressed: () => _showPopup(context),
-                      child: Icon(Icons.restart_alt)),
+                  Row(
+                    children: [
+                      ElevatedButton(
+                          onPressed: () => _showPopup(context),
+                          child: Icon(Icons.restart_alt)),
+                      ElevatedButton(
+                          onPressed: () => print("upload"),
+                          child: Icon(Icons.upload)),
+                    ],
+                  ),
                 ],
               ),
               for (int i = 0; i < fruits.length; i++)
@@ -160,7 +170,7 @@ class _SellsScreenState extends State<SellsScreen> {
                 child: TextField(
                   controller: _vueltoController,
                   keyboardType: TextInputType.number,
-                  decoration: InputDecoration(labelText: "Vuelto: "),
+                  decoration: const InputDecoration(labelText: "Vuelto: "),
                   onChanged: (value) {
                     setState(() {
                       vuelto = int.parse(value);
@@ -185,7 +195,7 @@ class _SellsScreenState extends State<SellsScreen> {
             ],
           ),
           Text(
-            "Plata que se debe entregar = ${totalSells - vuelto - ctaRut}",
+            "Plata que se debe entregar = ${formatoDinero.format(totalSells - vuelto - ctaRut)}",
             style: TextStyle(fontSize: 20),
           )
         ],
