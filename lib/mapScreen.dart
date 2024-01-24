@@ -13,13 +13,16 @@ class MapScreen extends StatefulWidget {
 class _MapScreenState extends State<MapScreen> {
   LatLng? currentPosition;
   Location location = Location();
+  late MapController mapController;
 
   @override
   void initState() {
     super.initState();
+    mapController = MapController();
     location.onLocationChanged.listen((LocationData xd) {
       setState(() {
         currentPosition = LatLng(xd.latitude!, xd.longitude!);
+        print("LISTENER MAP");
       });
     });
     getCurrentPosition();
@@ -71,25 +74,41 @@ class _MapScreenState extends State<MapScreen> {
     return Center(
       child: currentPosition == null
           ? CircularProgressIndicator()
-          : FlutterMap(
-              options:
-                  MapOptions(initialCenter: currentPosition!, initialZoom: 17),
+          : Column(
               children: [
-                TileLayer(
-                  urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                  userAgentPackageName: 'dev.fleaflet.flutter_map.example',
-                ),
-                MarkerLayer(markers: [
-                  Marker(
-                    point: currentPosition!,
-                    alignment: const Alignment(-0.5, -2),
-                    child: const Icon(
-                      Icons.person_pin_circle,
-                      color: Color.fromARGB(255, 1, 48, 255),
-                      size: 50,
-                    ),
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.6,
+                  child: FlutterMap(
+                    mapController: mapController,
+                    options: MapOptions(
+                        initialCenter: currentPosition!, initialZoom: 17),
+                    children: [
+                      TileLayer(
+                        urlTemplate:
+                            'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                        userAgentPackageName:
+                            'dev.fleaflet.flutter_map.example',
+                      ),
+                      MarkerLayer(markers: [
+                        Marker(
+                          point: currentPosition!,
+                          alignment: const Alignment(-0.5, -2),
+                          child: const Icon(
+                            Icons.person_pin_circle,
+                            color: Color.fromARGB(255, 1, 48, 255),
+                            size: 50,
+                          ),
+                        ),
+                      ]),
+                    ],
                   ),
-                ]),
+                ),
+                ElevatedButton(
+                    onPressed: () {
+                      if (currentPosition != null)
+                        mapController.move(currentPosition!, 17);
+                    },
+                    child: Text("Centrar Mapa"))
               ],
             ),
     );

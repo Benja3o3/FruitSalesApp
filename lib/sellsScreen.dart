@@ -120,14 +120,22 @@ class _SellsScreenState extends State<SellsScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(20),
+      margin: EdgeInsets.only(left: 10, right: 10, bottom: 10),
       child: Column(
         children: [
           Column(
             children: [
-              const Text(
-                "Frutas Vendidas",
-                style: TextStyle(fontSize: 30),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    "Frutas Vendidas",
+                    style: TextStyle(fontSize: 30),
+                  ),
+                  ElevatedButton(
+                      onPressed: () => _showPopup(context),
+                      child: Icon(Icons.restart_alt)),
+                ],
               ),
               for (int i = 0; i < fruits.length; i++)
                 FruitCard(
