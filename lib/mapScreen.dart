@@ -12,6 +12,7 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   LatLng? currentPosition;
+  List<LatLng> tracePositions = [];
   Location location = Location();
   late MapController mapController;
 
@@ -22,7 +23,7 @@ class _MapScreenState extends State<MapScreen> {
     location.onLocationChanged.listen((LocationData xd) {
       setState(() {
         currentPosition = LatLng(xd.latitude!, xd.longitude!);
-        print("LISTENER MAP");
+        tracePositions.add(LatLng(xd.latitude!, xd.longitude!));
       });
     });
     getCurrentPosition();
@@ -62,11 +63,7 @@ class _MapScreenState extends State<MapScreen> {
       setState(() {
         currentPosition = LatLng(xd.latitude!, xd.longitude!);
       });
-      print("Latitude: ${xd.latitude}");
-      print("Longitude: ${xd.longitude}");
-    } catch (e) {
-      print("Error al obtener la ubicación: $e");
-    }
+    } catch (e) {}
   }
 
   @override
@@ -77,7 +74,8 @@ class _MapScreenState extends State<MapScreen> {
           : Column(
               children: [
                 Container(
-                  height: MediaQuery.of(context).size.height * 0.6,
+                  padding: EdgeInsets.all(5),
+                  height: MediaQuery.of(context).size.height * 0.7,
                   child: FlutterMap(
                     mapController: mapController,
                     options: MapOptions(
@@ -89,6 +87,12 @@ class _MapScreenState extends State<MapScreen> {
                         userAgentPackageName:
                             'dev.fleaflet.flutter_map.example',
                       ),
+                      PolylineLayer(polylines: [
+                        Polyline(
+                            points: tracePositions,
+                            color: Colors.blue,
+                            strokeWidth: 4)
+                      ]),
                       MarkerLayer(markers: [
                         Marker(
                           point: currentPosition!,
@@ -103,12 +107,26 @@ class _MapScreenState extends State<MapScreen> {
                     ],
                   ),
                 ),
-                ElevatedButton(
-                    onPressed: () {
-                      if (currentPosition != null)
-                        mapController.move(currentPosition!, 17);
-                    },
-                    child: Text("Centrar Mapa"))
+                Container(
+                  padding: EdgeInsets.all(10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ElevatedButton(
+                          onPressed: () {
+                            if (currentPosition != null)
+                              mapController.move(currentPosition!, 17);
+                          },
+                          child: Text("Centrar Mapa")),
+                      ElevatedButton(
+                          onPressed: () {
+                            if (currentPosition != null)
+                              mapController.move(currentPosition!, 17);
+                          },
+                          child: Text("Buscar Camioneta")),
+                    ],
+                  ),
+                )
               ],
             ),
     );
