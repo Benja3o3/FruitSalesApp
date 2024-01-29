@@ -4,6 +4,7 @@ import 'package:fruit_sales_app/fruitCard.dart';
 import 'package:fruit_sales_app/informationCard.dart';
 import 'package:fruit_sales_app/restartPopup.dart';
 import 'package:intl/intl.dart';
+import 'package:dio/dio.dart';
 
 class SellsScreen extends StatefulWidget {
   const SellsScreen({Key? key}) : super(key: key);
@@ -13,6 +14,7 @@ class SellsScreen extends StatefulWidget {
 }
 
 class _SellsScreenState extends State<SellsScreen> {
+  final dio = Dio();
   NumberFormat formatoDinero =
       NumberFormat.currency(locale: 'es_CL', symbol: '\$');
   final TextEditingController _vueltoController = TextEditingController();
@@ -29,6 +31,21 @@ class _SellsScreenState extends State<SellsScreen> {
   int frambuesas = 0;
   int currentPageIndex = 0;
   int frutillas = 0;
+  String apiResponse = "Frutas vendidas";
+
+  Future<void> getApi() async {
+    print("AAAAA");
+    try {
+      final response = await dio.get("http://10.0.2.2:8000/sessions");
+      print("RESPUIESTA");
+      setState(() {
+        apiResponse = response.data.toString();
+      });
+    } catch (e) {
+      print(e);
+      print("ERROR");
+    }
+  }
 
   void _showPopup(BuildContext context) {
     showDialog(
@@ -69,6 +86,7 @@ class _SellsScreenState extends State<SellsScreen> {
     prefs.setInt("${fruits[indexFruit]}Sell", fruitSells[indexFruit]);
     prefs.setInt("totalSell", totalSells);
     prefs.setInt("totalMoney", totalMoney);
+    getApi();
   }
 
   void restartSells() async {
@@ -118,6 +136,7 @@ class _SellsScreenState extends State<SellsScreen> {
   void initState() {
     super.initState();
     _loadPreferences();
+    getApi();
   }
 
   @override
@@ -131,8 +150,8 @@ class _SellsScreenState extends State<SellsScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    "Frutas Vendidas",
+                  Text(
+                    apiResponse,
                     style: TextStyle(fontSize: 30),
                   ),
                   Row(
