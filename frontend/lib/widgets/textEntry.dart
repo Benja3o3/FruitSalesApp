@@ -3,8 +3,13 @@ import 'package:flutter/material.dart';
 class TextEntry extends StatefulWidget {
   final String placeHolderText;
   final bool isPassword;
+  final TextEditingController controller;
+
   const TextEntry(
-      {required this.placeHolderText, required this.isPassword, Key? key})
+      {required this.controller,
+      required this.placeHolderText,
+      required this.isPassword,
+      Key? key})
       : super(key: key);
 
   @override
@@ -19,6 +24,7 @@ class _TextEntryState extends State<TextEntry> {
         SizedBox(
             width: MediaQuery.of(context).size.width * 0.8,
             child: TextFormField(
+              controller: widget.controller,
               obscureText: widget.isPassword,
               decoration: InputDecoration(
                   filled: true,

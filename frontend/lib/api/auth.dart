@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:frontend/models/profile.dart';
 import 'package:frontend/models/token.dart';
+import 'package:frontend/config.dart';
 
 class Auth {
   final dio = Dio();
 
   Future<Token> getToken() async {
-    final response = await dio.post("http://10.0.2.2:8000/login", data: {
+    final response = await dio.post("${AppConfig.apiUrl}/login", data: {
       "username": "dui",
       "password": "123",
     });
@@ -15,7 +16,7 @@ class Auth {
   }
 
   Future<Profile> getProfile(String token) async {
-    final response = await dio.get("http://10.0.2.2:8000/profile",
+    final response = await dio.get("${AppConfig.apiUrl}/profile",
         options: Options(headers: {
           "Authorization": "Bearer $token",
         }));

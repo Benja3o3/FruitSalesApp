@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/providers/workDayProvider.dart';
+import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -12,7 +14,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     return Container(
       child: Center(
-        child: Text("Settings"),
+        child: Text(context.watch<workDayProvider>().id.toString()),
       ),
     );
   }

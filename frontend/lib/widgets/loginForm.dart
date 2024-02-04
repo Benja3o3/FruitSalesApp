@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:frontend/api/auth.dart';
 import 'package:frontend/models/token.dart';
@@ -15,30 +17,28 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
+  final usernameController = TextEditingController();
+  final passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   final dio = Dio();
   late Token token = Token(token: "");
   final Auth auth = Auth();
-  // var token = {};
-
-  // Future<void> _login() async {
-  //   auth.getToken();
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Form(
         key: _formKey,
         child: Column(
           children: [
-            const TextEntry(
+            TextEntry(
+              controller: usernameController,
               placeHolderText: "Nombre de usuario",
               isPassword: false,
             ),
             const SizedBox(
               height: 30,
             ),
-            const TextEntry(
+            TextEntry(
+              controller: passwordController,
               placeHolderText: "***********",
               isPassword: true,
             ),
@@ -52,8 +52,13 @@ class _LoginFormState extends State<LoginForm> {
                       const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
                 ),
                 onPressed: () async {
-                  final response = await auth.getToken();
-                  context.read<userProvider>().setToken(response.token);
+                  final tokenResponse = await auth.getToken();
+                  final profileResponse =
+                      await auth.getProfile(tokenResponse.token);
+                  context.read<userProvider>().setToken(tokenResponse.token);
+                  context
+                      .read<userProvider>()
+                      .setUsername(profileResponse.username);
                   if (_formKey.currentState!.validate()) {
                     Navigator.push(
                         context,

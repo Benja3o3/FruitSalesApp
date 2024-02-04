@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/pages/loginPage.dart';
+import 'package:frontend/providers/workDayProvider.dart';
 import 'package:provider/provider.dart';
 import 'package:frontend/providers/userProvider.dart';
 
 void main() {
-  runApp(
-    ChangeNotifierProvider(
-      create: (context) => userProvider(),
-      child: const MyApp(),
-    ),
-  );
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (context) => userProvider()),
+      ChangeNotifierProvider(create: (context) => workDayProvider())
+    ],
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
