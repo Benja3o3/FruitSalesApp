@@ -1,8 +1,9 @@
 import express, { Application } from "express";
 import { pool } from "./database";
 import cors from "cors";
+import morgan from "morgan";
 import IndexRoutes from "./routes/index.routes";
-import SessionsRoutes from "./routes/sessions.routes";
+import FruitRoutes from "./routes/fruit.routes";
 import AuthRoutes from "./routes/auth.routes";
 
 export class App {
@@ -21,7 +22,7 @@ export class App {
 
     routes() {
         this.app.use(IndexRoutes); //Se usa el archivo de rutas
-        this.app.use(SessionsRoutes);
+        this.app.use(FruitRoutes);
         this.app.use(AuthRoutes);
     }
 
@@ -29,6 +30,7 @@ export class App {
         this.app.use(cors()); //Se usan los cors
         this.app.use(express.json()); //Para que el backend entienda los .json
         this.app.use(express.urlencoded({ extended: false }));
+        this.app.use(morgan("dev")); //Para que muestre en consola las peticiones
     }
 
     async listen() {

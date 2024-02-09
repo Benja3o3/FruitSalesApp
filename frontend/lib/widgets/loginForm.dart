@@ -60,18 +60,16 @@ class _LoginFormState extends State<LoginForm> {
                       .read<userProvider>()
                       .setUsername(profileResponse.username);
                   if (_formKey.currentState!.validate()) {
-                    Navigator.push(
+                    Navigator.pushAndRemoveUntil(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => HomePage(),
-                        ));
+                        MaterialPageRoute(builder: (context) => HomePage()),
+                        (route) => false);
                   }
                 },
                 child: const Text(
                   "Iniciar",
                   style: TextStyle(color: Colors.white, fontSize: 20),
                 )),
-            Text(token.token)
           ],
         ));
   }

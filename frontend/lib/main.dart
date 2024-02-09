@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/pages/loginPage.dart';
+import 'package:frontend/providers/fruitProvider.dart';
 import 'package:frontend/providers/workDayProvider.dart';
 import 'package:provider/provider.dart';
 import 'package:frontend/providers/userProvider.dart';
@@ -7,6 +8,7 @@ import 'package:frontend/providers/userProvider.dart';
 void main() {
   runApp(MultiProvider(
     providers: [
+      ChangeNotifierProvider(create: (context) => fruitProvider()),
       ChangeNotifierProvider(create: (context) => userProvider()),
       ChangeNotifierProvider(create: (context) => workDayProvider())
     ],

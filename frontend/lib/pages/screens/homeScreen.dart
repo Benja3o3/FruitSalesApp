@@ -33,7 +33,6 @@ class _HomeScreenState extends State<HomeScreen> {
             Text(workDayController.text),
             ElevatedButton(
               onPressed: () {
-                print("pressed");
                 context.read<workDayProvider>().generateId();
                 Navigator.push(
                     context,

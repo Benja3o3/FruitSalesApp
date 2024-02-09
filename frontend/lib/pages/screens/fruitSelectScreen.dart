@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/api/fruitQuerys.dart';
+import 'package:frontend/pages/workPage.dart';
+import 'package:frontend/providers/fruitProvider.dart';
+import 'package:frontend/widgets/fruitSelectCard.dart';
+import 'package:frontend/widgets/fruitSelectList.dart';
+import 'package:provider/provider.dart';
 
 class FruitSelectScreen extends StatefulWidget {
   const FruitSelectScreen({Key? key}) : super(key: key);
@@ -8,6 +14,7 @@ class FruitSelectScreen extends StatefulWidget {
 }
 
 class _FruitSelectScreenState extends State<FruitSelectScreen> {
+  final FruitQuerys fruitQuerys = FruitQuerys();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -30,9 +37,47 @@ class _FruitSelectScreenState extends State<FruitSelectScreen> {
                 textAlign: TextAlign.center,
               ),
             ),
-            Text("Aqui van las frutas"),
+            Expanded(
+              child: FutureBuilder(
+                  future: fruitQuerys.getFruits(),
+                  builder: (context, snapshot) {
+                    print(snapshot.connectionState);
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      print(snapshot.data!);
+                      // FruitSelectList(fruits: snapshot.data!);
+                      return ListView.builder(
+                        itemBuilder: (context, i) {
+                          final isStartOfRow = i % 2 == 0;
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment
+                                .spaceBetween, // Adjust spacing as needed
+                            children: [
+                              if (isStartOfRow)
+                                FruitSelectCard(
+                                  fruit: snapshot.data![i],
+                                ),
+                              if (i + 1 < snapshot.data!.length && isStartOfRow)
+                                FruitSelectCard(
+                                  fruit: snapshot.data![i + 1],
+                                ),
+                            ],
+                          );
+                        },
+                        itemCount: snapshot.data!.length,
+                      );
+                    }
+                    return CircularProgressIndicator();
+                  }),
+            ),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => WorkPage()));
+                },
+                child: Text("Continuar")),
             ElevatedButton(
               onPressed: () {
+                context.read<fruitProvider>().clearFruit();
                 Navigator.pop(context);
               },
               child: Text("Go back"),

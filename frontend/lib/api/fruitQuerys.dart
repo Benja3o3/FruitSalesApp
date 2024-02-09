@@ -6,8 +6,8 @@ import 'package:frontend/models/fruit.dart';
 class FruitQuerys {
   final dio = Dio();
 
-  Future<Fruit> getToken() async {
+  Future<List<Fruit>> getFruits() async {
     final response = await dio.get("${AppConfig.apiUrl}/fruit");
-    return Fruit.fromJson(response.data);
+    return Fruit.fromJsonList(response.data);
   }
 }
