@@ -9,7 +9,7 @@ class Auth {
 
   Future<Token> getToken() async {
     final response = await dio.post("${AppConfig.apiUrl}/login", data: {
-      "username": "benja",
+      "username": "admin",
       "password": "123",
     });
     return Token(token: response.data["token"]);

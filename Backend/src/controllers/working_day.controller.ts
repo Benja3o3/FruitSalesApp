@@ -9,8 +9,8 @@ export const fruitsToWorkingDay = async (req: Request, res: Response) => {
         const promise = new Promise<string>((resolve, reject) => {
             pool.query(
                 `
-                INSERT INTO working_day_fruit (id, working_day_id, fruit_id, created_by)
-                VALUES (DEFAULT, ${working_day_id}, ${id}, ${created_by});
+                INSERT INTO fruit_sell (id, created_by, fruit_id, working_day_id)
+                VALUES (DEFAULT, ${created_by}, ${id}, ${working_day_id});
                 `,
                 (error, results) => {
                     if (error) {

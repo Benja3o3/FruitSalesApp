@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:frontend/config.dart';
 import 'package:frontend/models/fruit.dart';
+import 'package:frontend/models/fruitSell.dart';
 
 class FruitQuerys {
   final dio = Dio();
@@ -22,5 +23,11 @@ class FruitQuerys {
       "fruit_id": fruit_id,
       "created_by": created_by
     });
+  }
+
+  Future<List<FruitSell>> getFruitSell(int user_id, int working_day_id) async {
+    final response = await dio.get("${AppConfig.apiUrl}/fruitUserSell",
+        data: {"user_id": user_id, "working_day_id": working_day_id});
+    return FruitSell.fromJsonList(response.data);
   }
 }
