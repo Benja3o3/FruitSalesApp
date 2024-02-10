@@ -17,7 +17,11 @@ export const loginHandler = async (req: Request, res: Response) => {
         return res.status(400).json({ message: "Invalid user" });
     }
     const token = jwt.sign(
-        { username: founded_user.username, type: founded_user.type },
+        {
+            id: founded_user.id,
+            username: founded_user.username,
+            type: founded_user.type,
+        },
         "secret",
         {
             expiresIn: 60 * 60 * 24,

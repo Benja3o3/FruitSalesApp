@@ -9,7 +9,7 @@ class Auth {
 
   Future<Token> getToken() async {
     final response = await dio.post("${AppConfig.apiUrl}/login", data: {
-      "username": "dui",
+      "username": "benja",
       "password": "123",
     });
     return Token(token: response.data["token"]);
@@ -20,6 +20,7 @@ class Auth {
         options: Options(headers: {
           "Authorization": "Bearer $token",
         }));
+    print(response.data);
     return Profile.fromJson(response.data);
   }
 }

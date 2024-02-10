@@ -59,6 +59,8 @@ class _LoginFormState extends State<LoginForm> {
                   context
                       .read<userProvider>()
                       .setUsername(profileResponse.username);
+                  context.read<userProvider>().setType(profileResponse.type);
+                  context.read<userProvider>().setId(profileResponse.id);
                   if (_formKey.currentState!.validate()) {
                     Navigator.pushAndRemoveUntil(
                         context,

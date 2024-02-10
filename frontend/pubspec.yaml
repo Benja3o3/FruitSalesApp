@@ -63,6 +63,10 @@ flutter:
         - assets/mainLogo.png
         - assets/profileIcon.png
         - assets/newIcon.png
+        - assets/frambuesa.png
+        - assets/frutilla.png
+        - assets/arandano.png
+        - assets/melon.png
 
     # An image asset can refer to one or more resolution-specific "variants", see
     # https://flutter.dev/assets-and-images/#resolution-aware

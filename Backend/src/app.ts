@@ -5,6 +5,7 @@ import morgan from "morgan";
 import IndexRoutes from "./routes/index.routes";
 import FruitRoutes from "./routes/fruit.routes";
 import AuthRoutes from "./routes/auth.routes";
+import WorkinDayRoutes from "./routes/working_day.routes";
 
 export class App {
     private app: Application; //Construye una aplicacion servidor de express
@@ -24,6 +25,7 @@ export class App {
         this.app.use(IndexRoutes); //Se usa el archivo de rutas
         this.app.use(FruitRoutes);
         this.app.use(AuthRoutes);
+        this.app.use(WorkinDayRoutes);
     }
 
     middlewares() {

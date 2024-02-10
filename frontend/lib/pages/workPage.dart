@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/pages/screens/homeScreen.dart';
+import 'package:frontend/providers/userProvider.dart';
+import 'package:frontend/providers/workDayProvider.dart';
+import 'package:provider/provider.dart';
 
 class WorkPage extends StatefulWidget {
   const WorkPage({Key? key}) : super(key: key);
@@ -20,7 +23,9 @@ class _WorkPageState extends State<WorkPage> {
             onPressed: () {
               Navigator.popUntil(context, (route) => route.isFirst);
             },
-            child: Text("Go back"))
+            child: Text("Go back")),
+        Text(context.watch<workDayProvider>().id.toString()),
+        Text(context.watch<userProvider>().id.toString())
       ],
     ));
   }

@@ -1,7 +1,11 @@
+// ignore_for_file: non_constant_identifier_names, use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:frontend/api/fruitQuerys.dart';
 import 'package:frontend/pages/workPage.dart';
 import 'package:frontend/providers/fruitProvider.dart';
+import 'package:frontend/providers/userProvider.dart';
+import 'package:frontend/providers/workDayProvider.dart';
 import 'package:frontend/widgets/fruitSelectCard.dart';
 import 'package:frontend/widgets/fruitSelectList.dart';
 import 'package:provider/provider.dart';
@@ -28,7 +32,7 @@ class _FruitSelectScreenState extends State<FruitSelectScreen> {
           children: [
             Container(
               margin: const EdgeInsets.only(top: 50),
-              child: Text(
+              child: const Text(
                 "Selecciona las frutas para este día",
                 style: TextStyle(
                     fontSize: 20,
@@ -41,10 +45,7 @@ class _FruitSelectScreenState extends State<FruitSelectScreen> {
               child: FutureBuilder(
                   future: fruitQuerys.getFruits(),
                   builder: (context, snapshot) {
-                    print(snapshot.connectionState);
                     if (snapshot.connectionState == ConnectionState.done) {
-                      print(snapshot.data!);
-                      // FruitSelectList(fruits: snapshot.data!);
                       return ListView.builder(
                         itemBuilder: (context, i) {
                           final isStartOfRow = i % 2 == 0;
@@ -66,21 +67,33 @@ class _FruitSelectScreenState extends State<FruitSelectScreen> {
                         itemCount: snapshot.data!.length,
                       );
                     }
-                    return CircularProgressIndicator();
+                    return const CircularProgressIndicator();
                   }),
             ),
             ElevatedButton(
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => WorkPage()));
+                onPressed: () async {
+                  final workingDayId =
+                      Provider.of<workDayProvider>(context, listen: false).id;
+                  final fruit_id =
+                      Provider.of<fruitProvider>(context, listen: false)
+                          .fruitSelected;
+                  final created_by =
+                      Provider.of<userProvider>(context, listen: false).id;
+                  await fruitQuerys.newDay(workingDayId);
+                  await fruitQuerys.newDayWithFruits(
+                      workingDayId, fruit_id, created_by);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const WorkPage()));
                 },
-                child: Text("Continuar")),
+                child: const Text("Continuar")),
             ElevatedButton(
               onPressed: () {
                 context.read<fruitProvider>().clearFruit();
                 Navigator.pop(context);
               },
-              child: Text("Go back"),
+              child: const Text("Go back"),
             ),
           ],
         ),

@@ -40,7 +40,11 @@ class _FruitSelectCardState extends State<FruitSelectCard> {
           borderRadius: BorderRadius.circular(50),
         ),
         child: Column(children: [
-          Icon(Icons.apple),
+          SizedBox(
+            height: 100,
+            width: 100,
+            child: Image.asset("assets/${widget.fruit.icon}"),
+          ),
           Text(
             widget.fruit.name,
             style: TextStyle(

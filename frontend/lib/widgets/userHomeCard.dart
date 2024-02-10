@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/providers/userProvider.dart';
+import 'package:provider/provider.dart';
 
 class UserHomeCard extends StatefulWidget {
   final String username;
@@ -46,7 +48,7 @@ class _UserHomeCardState extends State<UserHomeCard> {
                 ],
               ),
             ),
-            const Text("¿Que deseas hacer hoy?")
+            const Text("¿Que deseas hacer hoy?"),
           ],
         )
       ]),
