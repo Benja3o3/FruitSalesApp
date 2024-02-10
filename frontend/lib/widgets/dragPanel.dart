@@ -15,8 +15,20 @@ class DragPanel extends StatefulWidget {
 
 class _DragPanelState extends State<DragPanel> {
   final FruitQuerys fruitQuerys = FruitQuerys();
+  void setTotals(BuildContext context) async {
+    final response = await fruitQuerys.getFruitSell(
+        Provider.of<userProvider>(context, listen: false).id,
+        Provider.of<workDayProvider>(context, listen: false).id);
+    int totalPotes = 0;
+    int totalMoney = 0;
+    response.forEach((element) {
+      totalPotes += int.parse(element.cantidad);
+      totalMoney += int.parse(element.cantidad) * element.price;
+    });
+    context.read<fruitProvider>().setTotalPotes(totalPotes);
+    context.read<fruitProvider>().setTotalMoney(totalMoney);
+  }
 
-  int totalPotes = 0;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -26,8 +38,8 @@ class _DragPanelState extends State<DragPanel> {
       height: MediaQuery.of(context).size.height * 0.8,
       child: Column(
         children: [
-          Icon(Icons.menu),
-          SizedBox(height: 20),
+          Icon(Icons.keyboard_arrow_up),
+          SizedBox(height: 10),
           Container(
             decoration: BoxDecoration(
                 color: Color.fromRGBO(232, 232, 232, 1),
@@ -109,39 +121,24 @@ class _DragPanelState extends State<DragPanel> {
                   height: MediaQuery.of(context).size.height * 0.1,
                   width: MediaQuery.of(context).size.width * 0.9,
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                              "Total de potes: ${context.watch<fruitProvider>().totalPotes}"),
+                            "Total de potes: ${context.watch<fruitProvider>().totalPotes}",
+                            style: TextStyle(fontSize: 20),
+                          ),
                           Text(
-                              "Dinero generado: ${context.watch<fruitProvider>().totalMoney}"),
+                              "Dinero generado: ${context.watch<fruitProvider>().totalMoney}",
+                              style: TextStyle(fontSize: 20)),
                         ],
                       ),
                       ElevatedButton(
-                          onPressed: () async {
-                            final response = await fruitQuerys.getFruitSell(
-                                Provider.of<userProvider>(context,
-                                        listen: false)
-                                    .id,
-                                Provider.of<workDayProvider>(context,
-                                        listen: false)
-                                    .id);
-                            int totalPotes = 0;
-                            int totalMoney = 0;
-                            response.forEach((element) {
-                              totalPotes += int.parse(element.cantidad);
-                              totalMoney +=
-                                  int.parse(element.cantidad) * element.price;
-                            });
-                            context
-                                .read<fruitProvider>()
-                                .setTotalPotes(totalPotes);
-                            context
-                                .read<fruitProvider>()
-                                .setTotalMoney(totalMoney);
-                          },
+                          onPressed: () => setTotals(context),
                           child: Icon(Icons.refresh))
                     ],
                   ),

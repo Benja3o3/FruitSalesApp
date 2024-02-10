@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/pages/screens/homeScreen.dart';
 import 'package:frontend/pages/screens/mapScreen.dart';
+import 'package:frontend/pages/screens/sellsScreen.dart';
 import 'package:frontend/providers/fruitProvider.dart';
 import 'package:frontend/providers/userProvider.dart';
 import 'package:frontend/providers/workDayProvider.dart';
@@ -16,21 +17,47 @@ class WorkPage extends StatefulWidget {
 }
 
 class _WorkPageState extends State<WorkPage> {
+  int currentPageIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Color.fromRGBO(199, 199, 199, 1),
-        body: SlidingUpPanel(
-          panel: DragPanel(),
-          body: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              MapScreen(),
-            ],
-          ),
-          maxHeight: MediaQuery.of(context).size.height * 0.8,
-          minHeight: MediaQuery.of(context).size.height * 0.05,
-          color: Colors.transparent,
+        bottomNavigationBar: BottomNavigationBar(
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.map),
+              label: 'Mapa',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.sell),
+              label: 'Ventas',
+            ),
+          ],
+          currentIndex: currentPageIndex,
+          selectedItemColor: Colors.amber[800],
+          onTap: (index) {
+            setState(() {
+              currentPageIndex = index;
+            });
+          },
+        ),
+        body: IndexedStack(
+          index: currentPageIndex,
+          children: [
+            SlidingUpPanel(
+              panel: DragPanel(),
+              body: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  MapScreen(),
+                ],
+              ),
+              maxHeight: MediaQuery.of(context).size.height * 0.8,
+              minHeight: MediaQuery.of(context).size.height * 0.03,
+              color: Colors.transparent,
+            ),
+            SellsScreen()
+          ],
         ));
   }
 }
