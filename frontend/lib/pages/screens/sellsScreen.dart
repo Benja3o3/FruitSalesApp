@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/api/fruitQuerys.dart';
+import 'package:frontend/providers/fruitProvider.dart';
 import 'package:frontend/providers/userProvider.dart';
 import 'package:frontend/providers/workDayProvider.dart';
 import 'package:frontend/widgets/fruitAddSellCard.dart';
@@ -7,7 +8,8 @@ import 'package:frontend/widgets/fruitSellCard.dart';
 import 'package:provider/provider.dart';
 
 class SellsScreen extends StatefulWidget {
-  const SellsScreen({Key? key}) : super(key: key);
+  final Function refresh;
+  const SellsScreen({required this.refresh, Key? key}) : super(key: key);
 
   @override
   _SellsScreenState createState() => _SellsScreenState();
@@ -15,6 +17,7 @@ class SellsScreen extends StatefulWidget {
 
 class _SellsScreenState extends State<SellsScreen> {
   final FruitQuerys fruitQuerys = FruitQuerys();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -35,8 +38,10 @@ class _SellsScreenState extends State<SellsScreen> {
               if (snapshot.connectionState == ConnectionState.done) {
                 return ListView.builder(
                   itemBuilder: (context, i) {
-                    final isStartOfRow = i % 2 == 0;
-                    return FruitAddSellCard(fruit: snapshot.data![i]);
+                    return FruitAddSellCard(
+                      fruit: snapshot.data![i],
+                      refresh: widget.refresh,
+                    );
                   },
                   itemCount: snapshot.data!.length,
                 );
@@ -50,7 +55,12 @@ class _SellsScreenState extends State<SellsScreen> {
         Container(
           height: MediaQuery.of(context).size.height * 0.4,
           width: MediaQuery.of(context).size.width * 08,
-          child: Text("a"),
+          decoration: BoxDecoration(
+              color: Color.fromRGBO(232, 232, 232, 1),
+              borderRadius: BorderRadius.circular(40)),
+          child: Text(
+              "Total: " + context.watch<fruitProvider>().totalPotes.toString(),
+              style: TextStyle(fontSize: 40)),
         )
       ]),
     );

@@ -15,26 +15,13 @@ class DragPanel extends StatefulWidget {
 
 class _DragPanelState extends State<DragPanel> {
   final FruitQuerys fruitQuerys = FruitQuerys();
-  void setTotals(BuildContext context) async {
-    final response = await fruitQuerys.getFruitSell(
-        Provider.of<userProvider>(context, listen: false).id,
-        Provider.of<workDayProvider>(context, listen: false).id);
-    int totalPotes = 0;
-    int totalMoney = 0;
-    response.forEach((element) {
-      totalPotes += int.parse(element.cantidad);
-      totalMoney += int.parse(element.cantidad) * element.price;
-    });
-    context.read<fruitProvider>().setTotalPotes(totalPotes);
-    context.read<fruitProvider>().setTotalMoney(totalMoney);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
           color: Color.fromRGBO(199, 199, 199, 1),
-          borderRadius: BorderRadius.circular(50)),
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(50), topRight: Radius.circular(50))),
       height: MediaQuery.of(context).size.height * 0.8,
       child: Column(
         children: [
@@ -128,18 +115,34 @@ class _DragPanelState extends State<DragPanel> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            "Total de potes: ${context.watch<fruitProvider>().totalPotes}",
-                            style: TextStyle(fontSize: 20),
-                          ),
-                          Text(
-                              "Dinero generado: ${context.watch<fruitProvider>().totalMoney}",
-                              style: TextStyle(fontSize: 20)),
+                          Expanded(
+                              child: FutureBuilder(
+                            future: fruitQuerys.getFruitTotals(
+                                Provider.of<workDayProvider>(context).id,
+                                Provider.of<userProvider>(context).id),
+                            builder: (context, snapshot) {
+                              print(snapshot.connectionState);
+                              print(snapshot.data);
+                              if (snapshot.connectionState ==
+                                  ConnectionState.done) {
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Total de potes: ${snapshot.data["totalpotes"]}",
+                                      style: TextStyle(fontSize: 20),
+                                    ),
+                                    Text(
+                                        "Total dinero: ${snapshot.data["totaldinero"]}",
+                                        style: TextStyle(fontSize: 20))
+                                  ],
+                                );
+                              }
+                              return CircularProgressIndicator();
+                            },
+                          ))
                         ],
                       ),
-                      ElevatedButton(
-                          onPressed: () => setTotals(context),
-                          child: Icon(Icons.refresh))
                     ],
                   ),
                 )

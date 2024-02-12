@@ -30,4 +30,28 @@ class FruitQuerys {
         data: {"user_id": user_id, "working_day_id": working_day_id});
     return FruitSell.fromJsonList(response.data);
   }
+
+  Future<void> addFruitSell(
+      int user_id, int working_day_id, int fruit_id) async {
+    await dio.post("${AppConfig.apiUrl}/fruitSell", data: {
+      "user_id": user_id,
+      "working_day_id": working_day_id,
+      "fruit_id": fruit_id
+    });
+  }
+
+  Future<void> removeFruitSell(
+      int user_id, int working_day_id, int fruit_id) async {
+    await dio.delete("${AppConfig.apiUrl}/fruitSell", data: {
+      "user_id": user_id,
+      "working_day_id": working_day_id,
+      "fruit_id": fruit_id
+    });
+  }
+
+  Future<dynamic> getFruitTotals(int working_day_id, int user_id) async {
+    final response = await dio.get("${AppConfig.apiUrl}/fruitTotals",
+        data: {"working_day_id": working_day_id, "user_id": user_id});
+    return response.data;
+  }
 }

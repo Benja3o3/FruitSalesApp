@@ -52,3 +52,69 @@ export const getAllFruitSell = (req: Request, res: Response) => {
         }
     );
 };
+
+export const addFruitSell = (req: Request, res: Response) => {
+    const { user_id, fruit_id, working_day_id } = req.body;
+    pool.query(
+        `
+    INSERT INTO fruit_sell (id, created_by, fruit_id, working_day_id)
+    VALUES (DEFAULT, ${user_id}, ${fruit_id}, ${working_day_id});
+    `,
+        (error, results) => {
+            if (error) throw error;
+            res.status(200).json({ message: "Fruit added successfully" });
+        }
+    );
+};
+
+export const deleteFruitSell = (req: Request, res: Response) => {
+    const { user_id, fruit_id, working_day_id } = req.body;
+    pool.query(
+        `
+    WITH LastFruitSell AS (
+        SELECT id
+        FROM fruit_sell
+        WHERE working_day_id = ${working_day_id}
+          AND created_by = ${user_id}
+          AND fruit_id = ${fruit_id}
+        ORDER BY id DESC
+        LIMIT 1
+    )
+    DELETE FROM fruit_sell
+    WHERE id = (SELECT id FROM LastFruitSell);
+    `,
+        (error, results) => {
+            if (error) throw error;
+            res.status(200).json({ message: "Fruit deleted successfully" });
+        }
+    );
+};
+
+export const getFruitTotals = (req: Request, res: Response) => {
+    const { working_day_id, user_id } = req.body;
+    pool.query(
+        `
+    SELECT 
+    (COUNT(*) - COUNT(DISTINCT fruit_id)) AS totalPotes,
+    SUM(price) - 
+        (
+        SELECT SUM(price)
+        FROM fruit
+        WHERE id IN (
+            SELECT DISTINCT fruit_id
+            FROM fruit_sell
+            WHERE working_day_id = 468159
+            GROUP BY fruit_id
+            )
+        ) AS totalDinero
+    FROM fruit_sell
+    JOIN fruit ON fruit_sell.fruit_id = fruit.id
+    WHERE working_day_id = ${working_day_id}
+    AND created_by = ${user_id}; 
+    `,
+        (error, results) => {
+            if (error) throw error;
+            res.status(200).json(results.rows[0]);
+        }
+    );
+};
