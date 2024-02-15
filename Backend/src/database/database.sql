@@ -49,6 +49,16 @@ CREATE TABLE IF NOT EXISTS working_day_user (
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE RESTRICT ON UPDATE RESTRICT
 );
 
+CREATE TABLE IF NOT EXISTS current_position (
+  id SERIAL PRIMARY KEY,
+  latitude float NOT NULL,
+  longitude float NOT NULL,
+  user_id int NOT NULL,
+  working_day_id int NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  FOREIGN KEY (working_day_id) REFERENCES working_day(id) ON DELETE RESTRICT ON UPDATE RESTRICT
+);
+
 INSERT INTO users VALUES (DEFAULT, 'admin', '$2b$10$rgLWiEIs1HdDJHwZIc.U1ubfnne03WRtZbYgrQELsmdG6gRtSEdsS', 'vendedor'); 
 
 INSERT INTO fruit 

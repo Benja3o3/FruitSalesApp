@@ -64,8 +64,6 @@ class _SellsDragPanelState extends State<SellsDragPanel> {
                   Provider.of<workDayProvider>(context).id,
                   Provider.of<userProvider>(context).id),
               builder: (context, snapshot) {
-                print(snapshot.connectionState);
-                print(snapshot.data);
                 if (snapshot.connectionState == ConnectionState.done) {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

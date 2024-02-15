@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/pages/screens/homeScreen.dart';
 import 'package:frontend/pages/screens/mapScreen.dart';
-import 'package:frontend/pages/screens/sellsScreen.dart';
 import 'package:frontend/pages/screens/sellsScreenFull.dart';
-import 'package:frontend/providers/fruitProvider.dart';
 import 'package:frontend/providers/userProvider.dart';
 import 'package:frontend/providers/workDayProvider.dart';
 import 'package:frontend/widgets/dragPanel.dart';
-import 'package:frontend/widgets/sellsDragPanel.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -51,7 +47,12 @@ class _WorkPageState extends State<WorkPage> {
               body: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  MapScreen(),
+                  MapScreen(
+                    user_id:
+                        Provider.of<userProvider>(context, listen: false).id,
+                    working_day_id:
+                        Provider.of<workDayProvider>(context, listen: false).id,
+                  ),
                 ],
               ),
               maxHeight: MediaQuery.of(context).size.height * 0.8,

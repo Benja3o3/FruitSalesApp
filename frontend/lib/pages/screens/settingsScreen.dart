@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/providers/fruitProvider.dart';
 import 'package:frontend/providers/workDayProvider.dart';
+import 'package:frontend/widgets/widgetPrueba.dart';
 import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -11,6 +12,8 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  String text = "Hola";
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -19,6 +22,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
         children: [
           Text(context.watch<workDayProvider>().id.toString()),
           Text(context.watch<fruitProvider>().fruitSelected.toString()),
+          WidgetPrueba(text: text),
+          ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  text = "Adios";
+                });
+              },
+              child: Text("Cambiar texto"))
         ],
       ),
     );
