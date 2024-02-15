@@ -15,6 +15,14 @@ class MapMarkers extends StatefulWidget {
 }
 
 class _MapMarkersState extends State<MapMarkers> {
+  List<Color> _markerColors = [
+    Colors.blue,
+    Colors.red,
+    Colors.green,
+    Colors.orange,
+    Colors.purple,
+    Colors.yellow,
+  ];
   @override
   Widget build(BuildContext context) {
     return MarkerLayer(markers: [
@@ -31,9 +39,11 @@ class _MapMarkersState extends State<MapMarkers> {
           .map((e) => Marker(
                 point: LatLng(e.latitude, e.longitude),
                 alignment: const Alignment(-0.5, -2),
-                child: const Icon(
-                  Icons.person_pin_circle,
-                  color: Color.fromARGB(255, 1, 48, 255),
+                child: Icon(
+                  e.type == "vendedor"
+                      ? Icons.person_pin_circle
+                      : Icons.car_crash,
+                  color: _markerColors[widget.positions.indexOf(e)],
                   size: 50,
                 ),
               ))
