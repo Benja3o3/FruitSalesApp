@@ -29,7 +29,7 @@ class _TracePositionMarkerState extends State<TracePositionMarker> {
                 points: e.coordinates_list
                     .map((e) => LatLng(e['x']!, e['y']!))
                     .toList(),
-                color: _routesColors[widget.tracePositions.indexOf(e)],
+                color: _routesColors[e.user_id],
                 strokeWidth: 4))
             .toList());
   }

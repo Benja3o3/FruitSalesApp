@@ -20,16 +20,31 @@ export const getCurrentPositions = async (req: Request, res: Response) => {
 
 export const addCurrentPosition = async (req: Request, res: Response) => {
     const { working_day_id, latitude, longitude, user_id } = req.body;
+
     pool.query(
         `
-    INSERT INTO current_position (id, latitude, longitude, user_id, working_day_id) 
-    VALUES (DEFAULT, ${latitude}, ${longitude}, ${user_id}, ${working_day_id});
+    SELECT id FROM current_position WHERE user_id = ${user_id} AND working_day_id = ${working_day_id};
     `,
         (error, results) => {
             if (error) {
                 throw error;
             }
-            res.status(201).send(`Position added`);
+            if (results.rows.length > 0) {
+                res.status(201).send(`Position already exists`);
+            } else {
+                pool.query(
+                    `
+                INSERT INTO current_position (id, latitude, longitude, user_id, working_day_id) 
+                VALUES (DEFAULT, ${latitude}, ${longitude}, ${user_id}, ${working_day_id});
+                `,
+                    (error, results) => {
+                        if (error) {
+                            throw error;
+                        }
+                        res.status(201).send(`Position added`);
+                    }
+                );
+            }
         }
     );
 };

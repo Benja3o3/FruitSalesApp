@@ -34,7 +34,7 @@ class _MapMarkersState extends State<MapMarkers> {
                   e.type == "vendedor"
                       ? Icons.person_pin_circle
                       : Icons.car_crash,
-                  color: _markerColors[widget.positions.indexOf(e)],
+                  color: _markerColors[e.user_id],
                   size: 50,
                 ),
               ))

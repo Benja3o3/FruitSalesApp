@@ -124,7 +124,9 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
         widget.user_id,
         widget.working_day_id,
       );
-      isAdded = true;
+      setState(() {
+        isAdded = true;
+      });
     } catch (e) {
       print("ERROR EN ADDPOSITION FUNCTION: $e");
     }
