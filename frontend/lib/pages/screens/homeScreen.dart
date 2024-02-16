@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/api/auth.dart';
 import 'package:frontend/pages/screens/fruitSelectScreen.dart';
+import 'package:frontend/pages/workPage.dart';
 import 'package:frontend/providers/workDayProvider.dart';
 import 'package:frontend/widgets/textEntry.dart';
 import 'package:frontend/widgets/userHomeCard.dart';
@@ -63,6 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
               height: MediaQuery.of(context).size.height * 0.05,
             ),
             TextEntry(
+                keyboardType: TextInputType.number,
                 controller: workDayController,
                 placeHolderText: "Ingresa a un nuevo dia",
                 isPassword: false),
@@ -78,6 +80,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     context
                         .read<workDayProvider>()
                         .setId(int.parse(workDayController.text));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const WorkPage()));
                   },
                   child: const Text(
                     "Ingresar",

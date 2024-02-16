@@ -30,6 +30,7 @@ class _LoginFormState extends State<LoginForm> {
         child: Column(
           children: [
             TextEntry(
+              keyboardType: TextInputType.text,
               controller: usernameController,
               placeHolderText: "Nombre de usuario",
               isPassword: false,
@@ -38,6 +39,7 @@ class _LoginFormState extends State<LoginForm> {
               height: 30,
             ),
             TextEntry(
+              keyboardType: TextInputType.text,
               controller: passwordController,
               placeHolderText: "***********",
               isPassword: true,

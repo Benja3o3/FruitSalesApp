@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
 class TextEntry extends StatefulWidget {
+  final TextInputType keyboardType;
   final String placeHolderText;
   final bool isPassword;
   final TextEditingController controller;
 
   const TextEntry(
-      {required this.controller,
+      {required this.keyboardType,
+      required this.controller,
       required this.placeHolderText,
       required this.isPassword,
       Key? key})
@@ -24,6 +26,7 @@ class _TextEntryState extends State<TextEntry> {
         SizedBox(
             width: MediaQuery.of(context).size.width * 0.8,
             child: TextFormField(
+              keyboardType: widget.keyboardType,
               controller: widget.controller,
               obscureText: widget.isPassword,
               decoration: InputDecoration(

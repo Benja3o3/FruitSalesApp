@@ -50,3 +50,37 @@ export const updateCurrentPosition = async (req: Request, res: Response) => {
         }
     );
 };
+
+export const getPositionHistory = async (req: Request, res: Response) => {
+    const { working_day_id } = req.body;
+    pool.query(
+        `
+        SELECT user_id, array_agg(coordinates) AS coordinates_list
+        FROM position_history
+        WHERE working_day_id = ${working_day_id}
+        GROUP BY user_id;
+    `,
+        (error, results) => {
+            if (error) {
+                throw error;
+            }
+            res.status(200).json(results.rows);
+        }
+    );
+};
+
+export const addPositionHistory = async (req: Request, res: Response) => {
+    const { working_day_id, coordinates, user_id } = req.body;
+    pool.query(
+        `
+    INSERT INTO position_history (id, coordinates, user_id, working_day_id) 
+    VALUES (DEFAULT, '${coordinates}', ${user_id}, ${working_day_id});
+    `,
+        (error, results) => {
+            if (error) {
+                throw error;
+            }
+            res.status(201).send(`Position added`);
+        }
+    );
+};
