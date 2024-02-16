@@ -5,6 +5,7 @@ import 'package:frontend/library/animated_map_controller.dart';
 import 'package:frontend/models/position.dart';
 import 'package:frontend/models/positionHistory.dart';
 import 'package:frontend/providers/fruitProvider.dart';
+import 'package:frontend/providers/userProvider.dart';
 import 'package:frontend/widgets/mapButton.dart';
 import 'package:frontend/widgets/mapMarkers.dart';
 import 'package:frontend/widgets/tracePositionMarker.dart';
@@ -24,6 +25,8 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
+  int _partnerIndex = 0;
+  LatLng? _vanCurrentPosition;
   late final _animatedMapController = AnimatedMapController(vsync: this);
   List<Position> _positions = [];
   List<PositionHistory> _positionHistory = [];
@@ -79,6 +82,13 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   void getPositions() async {
     try {
       final response = await PositionQuerys().getPositions(996575);
+      double? vanLatitude = response
+          .firstWhere((position) => position.type == "camioneta")
+          .latitude;
+      double? vanLongitude = response
+          .firstWhere((position) => position.type == "camioneta")
+          .longitude;
+      _vanCurrentPosition = LatLng(vanLatitude, vanLongitude);
       setState(() {
         _positions = response;
       });
@@ -182,14 +192,65 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                   right: 20,
                   child: Column(
                     children: [
-                      ElevatedButton(onPressed: () {}, child: Text("Center")),
-                      IconButton(onPressed: () {}, icon: Icon(Icons.traffic)),
-                      IconButton(onPressed: () {}, icon: Icon(Icons.traffic)),
                       MapButton(
+                          color: Colors.red,
+                          icon: Icon(Icons.close),
+                          onPressed: () {
+                            _animatedMapController.animateTo(
+                                dest: _currentPosition!, zoom: 17);
+                            // mapController.
+                          }),
+                      MapButton(
+                          color: Colors.blue,
                           icon: Icon(Icons.center_focus_weak),
                           onPressed: () {
                             _animatedMapController.animateTo(
                                 dest: _currentPosition!, zoom: 17);
+                            // mapController.
+                          }),
+                      MapButton(
+                          color: Colors.blue,
+                          icon: Icon(Icons.fire_truck),
+                          onPressed: () {
+                            _animatedMapController.animateTo(
+                                dest: _vanCurrentPosition!, zoom: 17);
+                            // mapController.
+                          }),
+                      MapButton(
+                          color: Colors.green,
+                          icon: Icon(Icons.navigate_next),
+                          onPressed: () {
+                            _positions.length > 0
+                                ? _animatedMapController.animateTo(
+                                    dest: LatLng(
+                                        _positions
+                                            .where((element) =>
+                                                element.user_id !=
+                                                Provider.of<userProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .id)
+                                            .toList()[_partnerIndex]
+                                            .latitude,
+                                        _positions
+                                            .where((element) =>
+                                                element.user_id !=
+                                                Provider.of<userProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .id)
+                                            .toList()[_partnerIndex]
+                                            .longitude),
+                                    zoom: 17)
+                                : _animatedMapController.animateTo(
+                                    dest: _currentPosition!, zoom: 17);
+                            setState(() {
+                              _partnerIndex++;
+                              if (_partnerIndex >= _positions.length - 1) {
+                                _partnerIndex = 0;
+                              }
+                            });
+
                             // mapController.
                           })
                     ],

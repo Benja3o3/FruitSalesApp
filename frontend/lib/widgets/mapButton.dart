@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 
 class MapButton extends StatefulWidget {
+  final Color color;
   final Icon icon;
   final Function onPressed;
-  const MapButton({required this.icon, required this.onPressed, Key? key})
+  const MapButton(
+      {required this.color,
+      required this.icon,
+      required this.onPressed,
+      Key? key})
       : super(key: key);
 
   @override
@@ -19,7 +24,7 @@ class _MapButtonState extends State<MapButton> {
         style: ButtonStyle(
           shadowColor: MaterialStateProperty.all(Colors.black),
           elevation: MaterialStateProperty.all(10),
-          backgroundColor: MaterialStateProperty.all(Colors.blue),
+          backgroundColor: MaterialStateProperty.all(widget.color),
           iconColor: MaterialStateProperty.all(Colors.white),
           shape: MaterialStateProperty.all(
             RoundedRectangleBorder(
