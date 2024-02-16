@@ -52,8 +52,8 @@ class _LoginFormState extends State<LoginForm> {
               padding: const EdgeInsets.all(8.0),
               child: Text(
                 errorMessage,
-                style:
-                    TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                    color: Colors.red, fontWeight: FontWeight.bold),
               ),
             ),
             ElevatedButton(

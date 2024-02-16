@@ -24,6 +24,7 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
+  bool isAdded = false;
   int _partnerIndex = 0;
   LatLng? _vanCurrentPosition;
   late final _animatedMapController = AnimatedMapController(vsync: this);
@@ -35,8 +36,8 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    addPosition();
-    addPositionHistory();
+    print(widget.user_id);
+    print(widget.working_day_id);
     getCurrentPosition();
     getPositions();
     getPositionHistory();
@@ -44,6 +45,9 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
       setState(() {
         _currentPosition = LatLng(xd.latitude!, xd.longitude!);
       });
+      if (!isAdded) {
+        addPosition();
+      }
       updatePosition();
       addPositionHistory();
       getPositions();
@@ -82,6 +86,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     try {
       final response =
           await PositionQuerys().getPositions(widget.working_day_id);
+      print(response);
       double? vanLatitude = response
           .firstWhere((position) => position.type == "camioneta")
           .latitude;
@@ -109,13 +114,17 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   }
 
   void addPosition() async {
+    if (_currentPosition == null) {
+      return;
+    }
     try {
       await PositionQuerys().addPosition(
         _currentPosition!.latitude,
         _currentPosition!.longitude,
         widget.user_id,
-        996575,
+        widget.working_day_id,
       );
+      isAdded = true;
     } catch (e) {
       print("ERROR EN ADDPOSITION FUNCTION: $e");
     }
@@ -130,7 +139,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
         _currentPosition!.latitude,
         _currentPosition!.longitude,
         widget.user_id,
-        996575,
+        widget.working_day_id,
       );
     } catch (e) {
       print("ERROR EN UPDATEPOSITION FUNCTION: $e");
@@ -223,31 +232,42 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                           onPressed: () {
                             _positions.length > 0
                                 ? _animatedMapController.animateTo(
-                                    dest: LatLng(
-                                        _positions
+                                    dest: _positions
                                             .where((element) =>
                                                 element.user_id !=
-                                                Provider.of<userProvider>(
-                                                        context,
-                                                        listen: false)
+                                                Provider.of<userProvider>(context, listen: false)
                                                     .id)
-                                            .toList()[_partnerIndex]
-                                            .latitude,
-                                        _positions
-                                            .where((element) =>
-                                                element.user_id !=
-                                                Provider.of<userProvider>(
-                                                        context,
-                                                        listen: false)
-                                                    .id)
-                                            .toList()[_partnerIndex]
-                                            .longitude),
+                                            .toList()
+                                            .isEmpty
+                                        ? _currentPosition
+                                        : LatLng(
+                                            _positions
+                                                .where((element) =>
+                                                    element.user_id !=
+                                                    Provider.of<userProvider>(context,
+                                                            listen: false)
+                                                        .id)
+                                                .toList()[_partnerIndex]
+                                                .latitude,
+                                            _positions
+                                                .where((element) =>
+                                                    element.user_id !=
+                                                    Provider.of<userProvider>(context, listen: false).id)
+                                                .toList()[_partnerIndex]
+                                                .longitude),
                                     zoom: 17)
-                                : _animatedMapController.animateTo(
-                                    dest: _currentPosition!, zoom: 17);
+                                : _animatedMapController.animateTo(dest: _currentPosition!, zoom: 17);
                             setState(() {
                               _partnerIndex++;
-                              if (_partnerIndex >= _positions.length - 1) {
+                              if (_partnerIndex >=
+                                  _positions
+                                      .where((element) =>
+                                          element.user_id !=
+                                          Provider.of<userProvider>(context,
+                                                  listen: false)
+                                              .id)
+                                      .toList()
+                                      .length) {
                                 _partnerIndex = 0;
                               }
                             });

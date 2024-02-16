@@ -81,6 +81,7 @@ class _FruitSelectScreenState extends State<FruitSelectScreen> {
                   await fruitQuerys.newDay(workingDayId);
                   await fruitQuerys.newDayWithFruits(
                       workingDayId, fruit_id, created_by);
+                  await fruitQuerys.changeType(created_by, "camioneta");
                   Navigator.push(
                       context,
                       MaterialPageRoute(

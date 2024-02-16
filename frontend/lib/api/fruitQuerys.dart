@@ -53,4 +53,15 @@ class FruitQuerys {
         data: {"working_day_id": working_day_id, "user_id": user_id});
     return response.data;
   }
+
+  Future<void> changeType(int user_id, String type) async {
+    try {
+      await dio.put("${AppConfig.apiUrl}/type", data: {
+        "user_id": user_id,
+        "type": type,
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
 }
