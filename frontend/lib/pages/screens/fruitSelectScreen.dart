@@ -7,7 +7,6 @@ import 'package:frontend/providers/fruitProvider.dart';
 import 'package:frontend/providers/userProvider.dart';
 import 'package:frontend/providers/workDayProvider.dart';
 import 'package:frontend/widgets/fruitSelectCard.dart';
-import 'package:frontend/widgets/fruitSelectList.dart';
 import 'package:provider/provider.dart';
 
 class FruitSelectScreen extends StatefulWidget {

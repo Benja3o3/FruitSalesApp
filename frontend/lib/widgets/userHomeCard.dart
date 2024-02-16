@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/providers/userProvider.dart';
-import 'package:provider/provider.dart';
 
 class UserHomeCard extends StatefulWidget {
   final String username;

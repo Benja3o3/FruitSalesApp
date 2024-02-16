@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/models/fruit.dart';
-import 'package:frontend/widgets/fruitSelectCard.dart';
 
 class FruitSelectList extends StatefulWidget {
   final List<Fruit> fruits;

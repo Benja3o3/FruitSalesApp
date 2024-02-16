@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/models/fruit.dart';
 import 'package:frontend/models/fruitSell.dart';
-import 'package:frontend/providers/fruitProvider.dart';
-import 'package:provider/provider.dart';
 
 class FruitSellCard extends StatefulWidget {
   final FruitSell fruit;

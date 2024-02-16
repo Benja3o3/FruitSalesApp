@@ -4,7 +4,6 @@ import 'package:frontend/providers/fruitProvider.dart';
 import 'package:frontend/providers/userProvider.dart';
 import 'package:frontend/providers/workDayProvider.dart';
 import 'package:frontend/widgets/fruitAddSellCard.dart';
-import 'package:frontend/widgets/fruitSellCard.dart';
 import 'package:provider/provider.dart';
 
 class SellsScreen extends StatefulWidget {

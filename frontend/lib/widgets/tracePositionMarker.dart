@@ -32,11 +32,5 @@ class _TracePositionMarkerState extends State<TracePositionMarker> {
                 color: _routesColors[widget.tracePositions.indexOf(e)],
                 strokeWidth: 4))
             .toList());
-    // Polyline(
-    //     points: widget.tracePositions,
-    //     color: Colors.blue,
-    //     strokeWidth: 4),
-
-    ;
   }
 }

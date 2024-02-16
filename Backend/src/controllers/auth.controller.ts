@@ -13,6 +13,8 @@ export const loginHandler = async (req: Request, res: Response) => {
     if (!req.body.username || !req.body.password)
         return res.status(400).json({ message: "Invalid user" });
     const founded_user = await getUserByUsername(req.body.username);
+    if (!founded_user)
+        return res.status(401).json({ message: "User not found" });
     if (!(await verifyPassword(req.body.password, founded_user.password))) {
         return res.status(400).json({ message: "Invalid user" });
     }

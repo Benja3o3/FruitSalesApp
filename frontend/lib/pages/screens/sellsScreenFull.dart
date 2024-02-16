@@ -11,6 +11,7 @@ class SellsScreenFull extends StatefulWidget {
 }
 
 class _SellsScreenFullState extends State<SellsScreenFull> {
+  // ignore: unused_field
   Key _uniqueKey = UniqueKey();
 
   void refreshData() {

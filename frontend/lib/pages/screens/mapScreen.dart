@@ -4,7 +4,6 @@ import 'package:frontend/api/positionQuerys.dart';
 import 'package:frontend/library/animated_map_controller.dart';
 import 'package:frontend/models/position.dart';
 import 'package:frontend/models/positionHistory.dart';
-import 'package:frontend/providers/fruitProvider.dart';
 import 'package:frontend/providers/userProvider.dart';
 import 'package:frontend/widgets/mapButton.dart';
 import 'package:frontend/widgets/mapMarkers.dart';
@@ -81,7 +80,8 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
 
   void getPositions() async {
     try {
-      final response = await PositionQuerys().getPositions(996575);
+      final response =
+          await PositionQuerys().getPositions(widget.working_day_id);
       double? vanLatitude = response
           .firstWhere((position) => position.type == "camioneta")
           .latitude;
@@ -139,7 +139,8 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
 
   void getPositionHistory() async {
     try {
-      final response = await PositionQuerys.getPositionHistory(996575);
+      final response =
+          await PositionQuerys.getPositionHistory(widget.working_day_id);
       setState(() {
         _positionHistory = response;
       });
@@ -156,7 +157,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
       await PositionQuerys().addPositionHistory(
         [_currentPosition!.latitude, _currentPosition!.longitude],
         widget.user_id,
-        996575,
+        widget.working_day_id,
       );
     } catch (e) {
       print("ERROR EN ADDPOSITIONHISTORY FUNCTION: $e");

@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:frontend/config.dart';
 import 'package:frontend/models/position.dart';

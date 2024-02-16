@@ -17,6 +17,7 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
+  String errorMessage = "";
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -45,7 +46,15 @@ class _LoginFormState extends State<LoginForm> {
               isPassword: true,
             ),
             const SizedBox(
-              height: 30,
+              height: 15,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                errorMessage,
+                style:
+                    TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+              ),
             ),
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
@@ -54,7 +63,16 @@ class _LoginFormState extends State<LoginForm> {
                       const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
                 ),
                 onPressed: () async {
-                  final tokenResponse = await auth.getToken();
+                  final tokenResponse;
+                  try {
+                    tokenResponse = await auth.getToken(
+                        usernameController.text, passwordController.text);
+                  } catch (e) {
+                    setState(() {
+                      errorMessage = "Usuario o contraseña incorrectos";
+                    });
+                    return;
+                  }
                   final profileResponse =
                       await auth.getProfile(tokenResponse.token);
                   context.read<userProvider>().setToken(tokenResponse.token);

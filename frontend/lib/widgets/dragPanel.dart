@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/api/fruitQuerys.dart';
-import 'package:frontend/providers/fruitProvider.dart';
 import 'package:frontend/providers/userProvider.dart';
 import 'package:frontend/providers/workDayProvider.dart';
 import 'package:frontend/widgets/fruitSellCard.dart';
@@ -18,15 +17,15 @@ class _DragPanelState extends State<DragPanel> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           color: Color.fromRGBO(199, 199, 199, 1),
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(50), topRight: Radius.circular(50))),
       height: MediaQuery.of(context).size.height * 0.8,
       child: Column(
         children: [
-          Icon(Icons.keyboard_arrow_up),
-          SizedBox(height: 10),
+          const Icon(Icons.keyboard_arrow_up),
+          const SizedBox(height: 10),
           Container(
             decoration: BoxDecoration(
                 color: Color.fromRGBO(232, 232, 232, 1),
