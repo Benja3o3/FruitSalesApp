@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+    initDatabase,
     loginHandler,
     profileHandler,
     registerHandler,
@@ -11,5 +12,6 @@ const router = Router();
 router.post("/login", loginHandler);
 router.post("/register", registerHandler);
 router.get("/profile", requiredAuth, profileHandler);
+router.get("/init", initDatabase);
 
 export default router;
