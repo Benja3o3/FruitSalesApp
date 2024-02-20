@@ -208,8 +208,8 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                           color: Colors.red,
                           icon: Icon(Icons.close),
                           onPressed: () {
-                            _animatedMapController.animateTo(
-                                dest: _currentPosition!, zoom: 17);
+                            Navigator.popUntil(
+                                context, (route) => route.isFirst);
                             // mapController.
                           }),
                       MapButton(

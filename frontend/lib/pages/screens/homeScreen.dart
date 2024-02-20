@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/api/auth.dart';
+import 'package:frontend/api/fruitQuerys.dart';
 import 'package:frontend/pages/screens/fruitSelectScreen.dart';
 import 'package:frontend/pages/workPage.dart';
 import 'package:frontend/providers/workDayProvider.dart';
@@ -18,6 +19,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final Auth auth = Auth();
   final workDayController = TextEditingController();
+  final FruitQuerys fruitQuerys = FruitQuerys();
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +78,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 50, vertical: 10),
                   ),
-                  onPressed: () {
+                  onPressed: () async {
+                    final user_id =
+                        Provider.of<userProvider>(context, listen: false).id;
+                    await fruitQuerys.joinWorkingDay(
+                        int.parse(workDayController.text), user_id);
                     context
                         .read<workDayProvider>()
                         .setId(int.parse(workDayController.text));

@@ -24,6 +24,13 @@ class FruitQuerys {
     });
   }
 
+  Future<void> joinWorkingDay(int workingDayId, int user_id) async {
+    await dio.post("${AppConfig.apiUrl}/toWorkingDayByUserId", data: {
+      "working_day_id": workingDayId,
+      "user_id": user_id,
+    });
+  }
+
   Future<List<FruitSell>> getFruitSell(int user_id, int working_day_id) async {
     final response = await dio.get("${AppConfig.apiUrl}/fruitUserSell",
         data: {"user_id": user_id, "working_day_id": working_day_id});
